@@ -1,0 +1,124 @@
+import axios from "axios";
+import { useState } from "react";
+import { useCookies } from "react-cookie";
+import Header from "../../../../components/Header";
+
+function Editpost({blog}) {
+    
+    const [cookies, setCookie, removeCookie] = useCookies();
+    const [titlestate, setTitlestate] = useState(blog.title)
+    const [imagestate, setImagestate] = useState(blog.image)
+    const [bodystate, setBodystate] = useState(blog.body)
+
+    const [err, setErr] = useState("");
+
+    console.log(cookies)
+    
+    const handelSubmit = async(e)=>{
+        e.preventDefault()
+        try {
+            const result = await axios({
+                method:'patch',
+                url:`http://localhost:5000/${blog._id}`,
+                headers: { "auto-token": cookies.jwt || ''},
+                data:{
+                    title: titlestate,
+                    image: imagestate,
+                    body: bodystate
+                }
+               
+            })
+            setErr(result.data.result)
+        } catch (error) {
+            setErr(error.response.data.err)
+        }
+
+        
+    }
+    
+  
+    return (
+    <>
+    
+        <div className="max-w-5xl mx-auto">
+            <Header />
+            <div className=" h-screen w-9/12 mx-auto">
+                <form
+                    onSubmit={handelSubmit}
+                    method="PATCH"
+                    className="flex flex-col mt-20"
+                >
+                    <div className="flex justify-center mb-5 text-red-600 text-xl">
+                        <h3>{err}</h3>
+                    </div>
+
+                    <input
+                        onChange={(e) => setTitlestate(e.target.value)}
+                        className="form-control
+                                mb-5
+                                block
+                                w-full
+                                px-3
+                                py-1.5
+                                text-lg
+                                font-bold
+                                text-white
+                                bg-gray-900
+                                
+                                rounded
+                                transition
+                                ease-in-out
+                                m-0
+                                outline-none
+                                focus:text-white focus:border-blue-600"
+                        type="text"
+                        placeholder="Title..."
+                        name="title"
+                        value={titlestate}
+                    />
+                    <input
+                        onChange={(e) => setImagestate(e.target.value)}
+                        className="px-3 py-1.5 rounded-md text-white mb-16 text-lg font-bold focus:text-white bg-gray-900 focus:border-blue-600 transition ease-in-out"
+                        type="text"
+                        placeholder="image url..."
+                        name="image"
+                        value={imagestate}
+                    />
+                    <textarea
+                        onChange={(e) => setBodystate(e.target.value)}
+                        className="pl-3 pt-2 pb-2 pr-4 rounded-md border border-solid border-gray-300 text-white bg-gray-900 focus:outline-none focus:text-white text-base mb-3"
+                        type="text"
+                        rows="9"
+                        cols="70"
+                        name="body"
+                        value={bodystate}
+                    ></textarea>
+                    <button
+                        type="submit"
+                        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                    >
+                        Submit
+                    </button>
+                </form>
+            </div>
+        </div>
+    </>
+    );
+}
+
+export async function getServerSideProps({params, query}){
+    const post_id = params.postId
+    const result = await axios({
+        method:'get',
+        url:`http://localhost:5000/post`,
+        data: {
+            id: post_id
+        }
+    })
+    return {
+        props: {blog : result.data}
+    }
+}       
+
+
+export default Editpost
