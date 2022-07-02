@@ -1,18 +1,21 @@
 import Link from 'next/link'
-import Image from 'next/image'
 import {SearchIcon, PlusCircleIcon, LoginIcon, LogoutIcon, MenuAlt2Icon} from '@heroicons/react/outline'
 import {HomeIcon} from '@heroicons/react/solid'
 import Router from 'next/router'
 import Cookies from 'universal-cookie';
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 function Header() {
 
   const cookie = new Cookies()
   
   const [logstatus, setLogstatus] = useState('')
-  const logout = ()=>{
+  const [logged, setLogged] = useState(false)
+
+
+  const logout = async ()=>{
     cookie.remove('jwt')
     setLogstatus('logged out')
     setTimeout(() => {
@@ -20,30 +23,32 @@ function Header() {
       Router.push('/')
     }, 700);
   }
-
+  
   const [toggle, setToggle] = useState(false)
+  useEffect(()=>{
+    if(cookie.get('jwt')) setLogged(true)
+    else setLogged(false)
+  }, [logstatus])
   
   return (
     <>
       <div className='flex justify-around items-center pb-1 pt-1 shadow-md bg-white'>
           <div className = 'w-32 h-12 relative hidden lg:inline-grid'>
-            <Link className = 'relavtive w-full h-full'  href='/'>
+            <Link href='/'>
               <a className = 'relavtive w-full h-full'>
-                <Image
+                <img className='object-contain'
                   src='https://s.w.org/style/images/about/WordPress-logotype-standard.png'
-                  layout='fill'
+                  
                 />
               </a>
             </Link>
           </div>
 
           <div className = 'w-20 h-12 relative lg:hidden'>
-            <Link className = 'relavtive w-full h-full' href='/'>
-              <a className = 'relavtive w-full h-full'>
-                <Image
+            <Link href='/'>
+              <a>
+                <img className='w-full h-full object-fill'
                   src='https://s.w.org/style/images/about/WordPress-logotype-wmark.png'
-                  layout='fill'
-                  objectFit='contain'
                 />
               </a>
             </Link>
@@ -68,10 +73,11 @@ function Header() {
 
               <MenuAlt2Icon onClick = {()=>setToggle(prev => !prev)} className='h-5 w-10 cursor-pointer sm:hidden'></MenuAlt2Icon>
 
-              {typeof(cookie.get('jwt')) !== 'undefined' ? <LogoutIcon onClick = {logout} className='h-5 w-10 cursor-pointer'></LogoutIcon> :
+              {logged ? <LogoutIcon onClick = {logout} className='h-5 w-10 cursor-pointer'></LogoutIcon> :
               <Link href='/login'><LoginIcon className='h-5 w-10 cursor-pointer'/></Link>
               } 
               <h4 className='abolute'>{logstatus}</h4>
+              
           </div>     
       </div>
 

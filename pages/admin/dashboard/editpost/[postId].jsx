@@ -1,26 +1,23 @@
 import axios from "axios";
 import { useState } from "react";
-import { useCookies } from "react-cookie";
 import Header from "../../../../components/Header";
-
+import Cookies from "universal-cookie";
 function Editpost({blog}) {
     
-    const [cookies, setCookie, removeCookie] = useCookies();
+    
     const [titlestate, setTitlestate] = useState(blog.title)
     const [imagestate, setImagestate] = useState(blog.image)
     const [bodystate, setBodystate] = useState(blog.body)
-
-    const [err, setErr] = useState("");
-
-    console.log(cookies)
     
+    const [err, setErr] = useState("");
+    const cookies = new Cookies()
     const handelSubmit = async(e)=>{
         e.preventDefault()
         try {
             const result = await axios({
                 method:'patch',
-                url:`http://localhost:5000/${blog._id}`,
-                headers: { "auto-token": cookies.jwt || ''},
+                url:`http://localhost:5000/edit/${blog._id}`,
+                headers: { "auto-token": cookies.get('jwt') || ''},
                 data:{
                     title: titlestate,
                     image: imagestate,
@@ -30,8 +27,12 @@ function Editpost({blog}) {
             })
             setErr(result.data.result)
         } catch (error) {
+            console.log(error)
             setErr(error.response.data.err)
         }
+        setTimeout(()=>{
+            setErr('')
+        },700)
 
         
     }

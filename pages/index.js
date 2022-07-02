@@ -28,7 +28,6 @@ export default function Index(props) {
 
 export async function getStaticProps(context) {
   const response = await axios.get('http://localhost:5000')
-  console.log('this executed')
   return {
     props: {
       blogdata : response.data
