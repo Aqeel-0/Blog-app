@@ -1,17 +1,17 @@
 import axios from "axios";
 import { useState } from "react";
 import Header from "../components/Header";
-
-import { useCookies } from "react-cookie";
+import Cookies from 'universal-cookie';
 
 function CreatePost() {
+
+    const cookies = new Cookies()
+
     const [titleState, setTitlestate] = useState("");
     const [imageState, setImagestate] = useState("");
     const [bodyState, setBodystate] = useState("");
 
-    const [err, setErr] = useState("");
-
-    const [cookies, setCookie, removeCookie] = useCookies();
+    const [err, setErr] = useState('');
    
     const titleHandeler = (e) => {
         setTitlestate(e.target.value);
@@ -32,7 +32,7 @@ function CreatePost() {
         };
         const authAxios = axios.create({
             baseURL: "http://localhost:5000",
-            headers: { "auto-token": cookies.jwt || ''},
+            headers: { "auto-token": cookies.get('jwt') || ''},
         });
         try {
             const result = await authAxios.post("", newpost);
@@ -40,6 +40,9 @@ function CreatePost() {
         } catch (err) {
             setErr(err.response.data.err);
         }
+        setTimeout(() => {
+            setErr('')
+        }, 1000)
 
         setTitlestate("");
         setImagestate("");
@@ -51,15 +54,15 @@ function CreatePost() {
         
             <div className="max-w-5xl mx-auto">
                 <Header />
-                <div className=" h-screen w-9/12 mx-auto">
+                <div className=" h-screen w-9/12 mx-auto relative">
+                    <div className="flex justify-center mb-5 text-red-600 text-xl absolute left-[40%] top-[-50px]">
+                        {err && <h1>{err}</h1>}
+                    </div>
                     <form
                         onSubmit={handelSubmit}
                         method="POST"
                         className="flex flex-col mt-20"
                     >
-                        <div className="flex justify-center mb-5 text-red-600 text-xl">
-                            <h3>{err}</h3>
-                        </div>
 
                         <input
                             onChange={titleHandeler}

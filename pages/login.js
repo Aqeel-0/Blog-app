@@ -21,10 +21,16 @@ function Login() {
             })
             .then((result) => {
                 setErr(result.data.message);
-                setTimeout(() => {
-                    Router.push('/')
-                }, 500);
-
+                if(result.data.user === 'Admin'){
+                    setTimeout(() => {
+                        Router.push('/admin/dashboard')
+                    }, 500);
+                }
+                else{
+                    setTimeout(() => {
+                        Router.push('/')
+                    }, 500);
+                }
             })
             .catch((err) => {
                 console.log(err)

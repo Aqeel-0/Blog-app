@@ -1,29 +1,49 @@
 import Header from "../../../components/Header";
 import { useState } from "react";
 import Link from 'next/link'
-import { TrashIcon, PencilIcon } from "@heroicons/react/outline";
+import { TrashIcon, PencilIcon, ArrowRightIcon } from "@heroicons/react/outline";
 import axios from "axios";
-import { useCookies } from "react-cookie";
-function Index({ posts }) {
+import Cookies from 'universal-cookie';
 
-    const [cookies, setCookie, removeCookie] = useCookies();
-    const [err, setErr] = useState("");
-    const handleEdit = (e)=>{
 
+function Index(props) {
+
+    
+
+    const cookie = new Cookies()
+    const [err, setErr] = useState('');
+    const [posts, setPost] = useState(props.posts)
+
+    const deleteArr = (id) => { 
+        let newarr = posts.filter((item) => {
+            if(item._id !== id) return item
+        })
+        return newarr
     }
+
     const handleDelete = async (e)=>{
         const postId = e.target.parentNode.id
+        console.log(e.target)
         const options = axios.create({
             baseURL: "http://localhost:5000",
-            headers: { "auto-token": cookies.jwt || ''},
+            headers: { "auto-token": cookie.get('jwt') || ''},
         });
+        const originalArr = posts
+        const updated_arr = deleteArr(postId)
+        console.log(updated_arr)
+        setPost(updated_arr)
+
         try {
             const result = await options.delete(`${postId}`)
             setErr("post deleted");
         } catch (error) {
-            console.log(error.response.data.err)
+            setPost(originalArr)
+            console.log(error)
             setErr(error.response.data.err);
         }
+        setTimeout(() =>{
+            setErr('')
+        }, 1000)
     }
 
 
@@ -32,14 +52,17 @@ function Index({ posts }) {
             <div
                 key={post._id}
                 id={post._id}
-                className="flex items-center h-12 rounded-md border border-white bg-gray-900 pl-3 mb-2 overflow-hidden"
+                className="flex items-center h-12 rounded-sm border border-b-0 border-white bg-gray-900 pl-3 mb-2 overflow-hidden"
             >
                 <h1 className="text-white text-lg ">{post.title}</h1>
                 <div id={post._id} className=" flex ml-auto p-4">
-                    <Link href={`/admin/dashboard/editpost/${post._id}`}>
-                        <a><PencilIcon onClick={handleEdit} className="w-5 h-5 mr-2 text-white cursor-pointer"></PencilIcon></a>
+                    <Link href={`/${post._id}`}>
+                        <a><ArrowRightIcon className="w-5 h-5 mr-2 text-white cursor-pointer"></ArrowRightIcon></a>
                     </Link>
-                    <TrashIcon  onClick={handleDelete} className="w-5 h-5 text-white cursor-pointer"></TrashIcon>
+                    <Link href={`/admin/dashboard/editpost/${post._id}`}>
+                        <a><PencilIcon className="w-5 h-5 mr-2 text-white cursor-pointer"></PencilIcon></a>
+                    </Link>
+                    <TrashIcon onClick={handleDelete} className="w-full h-5 text-white cursor-pointer"/>
                 </div>
             </div>
         );
@@ -69,7 +92,9 @@ function Index({ posts }) {
                     <div className="w-auto  mx-2 sm:basis-[35%] h-[26rem] mt-10 overflow-y-auto overflow-x-hidden">
                         <div className="flex justify-between transition-all">
                             <h1 className="text-white text-xl mb-2">All posts</h1>
-                            <h1 className={err ? "text-red-800 text-lg" : "text-red-800 text-lg hidden"}>{err}</h1>
+                            <div className="text-red-800 text-lg">
+                                {err && <h1>{err}</h1>}
+                            </div>
                         </div> 
                         {arr}
                     </div>
@@ -129,11 +154,14 @@ function Index({ posts }) {
     );
 }
 
-export async function getStaticProps(context) {
+export async function getStaticProps() {
+
     const response = await axios.get("http://localhost:5000");
+    console.log('called')
     return {
         props: {
             posts: response.data,
+            
         },
     };
 }
