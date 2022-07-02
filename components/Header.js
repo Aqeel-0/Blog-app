@@ -47,7 +47,7 @@ function Header() {
           <div className = 'w-20 h-12 relative lg:hidden'>
             <Link href='/'>
               <a>
-                <img className='w-full h-full object-fill'
+                <img className='w-full h-full object-contain'
                   src='https://s.w.org/style/images/about/WordPress-logotype-wmark.png'
                 />
               </a>

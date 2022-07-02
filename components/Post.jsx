@@ -58,7 +58,7 @@ function Post({blogItem}) {
       key={blogItem._id}
       className="shadow-2xl mt-6 mb-6 mx-auto w-4/5 h-[25rem] rounded-sm relative bg-gray-800 sm:h-auto"
     > 
-      {status && <h1 className="text-lg text-red-700 absolute top-[-25px] left-[42%]">{status}</h1>}
+      {status && <h1 className="text-lg text-red-700 absolute top-[-25px] left-[38%]">{status}</h1>}
       <div className="flex mb-10 w-full m-auto mt-2 py-4 pb-8 px-4 flex-col items-start h-full sm:flex-row sm:h-[20rem]">
         <div className="relative basis-2/4 sm:h-full w-full sm:shrink-0">
           <img
