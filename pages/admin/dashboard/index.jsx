@@ -57,7 +57,7 @@ function Index(props) {
         
         
         try {
-            //const result = await options.delete(`${postId}`);
+            const result = await options.delete(`${postId}`);
             setErr("post deleted");
         } catch (error) {
             setPost(originalArr);
