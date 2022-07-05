@@ -60,7 +60,7 @@ export const login = async(req, res)=>{
     if(!match) return res.status(400).json({'reason':'incorrect password'})
     
 
-    const token = jsonwebtoken.sign({_id: info._id}, process.env.WEB_TOKEN)
+    const token = jsonwebtoken.sign({_id: info._id, name: info.name}, process.env.WEB_TOKEN)
     res.cookie('jwt', token, { sameSite: 'none', secure: true}) 
     if(info.name === 'Admin') return res.status(200).json({'message': 'logged in successfully', 'user': 'Admin'})
     res.status(200).json({'message': 'logged in successfully', 'user': 'User'})

@@ -5,7 +5,7 @@ const postRoute = express.Router()
 
 postRoute.get('/', getData)
 postRoute.get('/post', getSpecificData)
-postRoute.post('/',  Adminvalidate, postData)
+postRoute.post('/',  validate, postData)
 postRoute.delete('/:postId', Adminvalidate, deletePost)
 postRoute.patch('/edit/:postId', Adminvalidate, updatePost)
 
