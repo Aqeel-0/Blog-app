@@ -1,11 +1,10 @@
-
 import axios from 'axios'
 import Header from '../components/Header'
 import { IoIosAddCircle } from 'react-icons/io'
 import { useState } from 'react'
 import Cookies from "universal-cookie";
 import styled from 'styled-components';
-import { comment } from 'postcss';
+
 
 
 
@@ -64,11 +63,11 @@ export default function Post({data}) {
       <Header/>
     
       <div className="mt-6 mx-auto w-3/4 flex flex-col">
-        <div className='w-full h-40 '>
+        <div className='w-3/4 mx-auto h-40 '>
           <img className='w-full h-full object-fit' src={data.image} />
         </div>
-        <div className=' sm:w-3/4 sm:mx-auto'>
-          <h1 className='text-3xl text-[#cdcdcd]'>{data.title}</h1>
+        <div className= 'sm:w-3/4 sm:mx-auto'>
+          <h1 className= 'text-3xl text-[#cdcdcd]'>{data.title}</h1>
           <div className= 'w-full h-[1px] bg-zinc-300 mt-2 mb-5'></div>
           <div className='text-[#cdcdcd]'>
             {data.body}

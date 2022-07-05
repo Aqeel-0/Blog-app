@@ -17,7 +17,7 @@ function Post({blogItem}) {
   const [show, setShow] = useState(false);
   useEffect(() => {
     if (token) {
-      const verified = jsonwebtoken.verify(token, "sfshfhsdifhsiuhf"); // convert this to env later
+      const verified = jsonwebtoken.verify(token, process.env.NEXT_PUBLIC_WEB_TOKEN); // convert this to env later
       if (blogItem.likes && verified._id in blogItem.likes) {
         setHasliked(true) 
       }

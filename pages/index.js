@@ -8,7 +8,6 @@ import Modal from '../components/Modal'
 
 export default function Index(props) {
  
-
   return (
     <div className=''>
       <Head>
