@@ -1,103 +1,33 @@
 
 import Post from "./Post";
+import { useMemo, useState } from 'react'
+import {SearchIcon} from '@heroicons/react/outline'
+
 
 export default function Body({ content }) {
 
+  const [searchQuery, setSearchQuery] = useState('')
 
-  // const blogarr = content.map((blogItem) => {
-  //   const cookies = new Cookies();
-  //   const token = cookies.get("jwt");
-  //   const [likes, setLikes] = useState(blogItem.likes_count);
-  //   const [hasliked, setHasliked] = useState(false);
-  //   console.log(hasliked)
-
-    
-
-  //   const handleLike = async (e) => {
-  //     const id = e.target.parentNode.id;
-  //     try {
-  //       const result = await axios({
-  //         method: "patch",
-  //         url: `http://localhost:5000/${id}`,
-  //         headers: { "auto-token": cookies.get('jwt') || "" },
-  //       });
-  //       if(result.data.message === 'liked') {
-  //         setLikes(prevLikes => prevLikes+1)
-  //         setHasliked(true)
-  //       }
-  //       else {
-  //         setLikes(prevLikes=> prevLikes-1)
-  //         setHasliked(false)
-  //       }
-
-  //     } 
-  //     catch (error) {
-  //       console.log(error)
-  //     }
-  //   }
-
-  //   useEffect(() => {
-  //     if  (token) {
-  //       const verified = jsonwebtoken.verify(token, "sfshfhsdifhsiuhf") // convert this to env later
-  //       if(blogItem.like) if (verified._id in blogItem.likes) setHasliked(true)
-  //     }
-  //   }, [])
-
-  //   return (
-  //     <div
-  //       key={blogItem._id}
-  //       className="shadow-2xl mt-6 mb-6 mx-auto w-4/5 h-[25rem] rounded-sm relative bg-gray-800 sm:h-auto"
-  //     >
-  //       <div className="flex mb-10 w-full m-auto mt-2 py-4 pb-8 px-4 flex-col items-start h-full sm:flex-row sm:h-[20rem]">
-  //         <div className="relative basis-2/4 sm:h-full w-full sm:shrink-0">
-  //           <img
-  //             className="w-full h-full object-fit sm:h-full"
-  //             src={blogItem.image}
-  //           />
-  //         </div>
-  //         <div className="basis-2/4 h-full w-full overflow-hidden sm:ml-4 text-[#cdcdcd]">
-  //           <p className="text-left text-3xl">{blogItem.title}</p>
-  //           <p className="mt-2 text-sm ">{blogItem.body}</p>
-  //         </div>
-  //       </div>
-  //       <div
-  //         id={blogItem._id}
-  //         className="flex items-center absolute bottom-[6px] left-[20px]"
-  //       >
-  //         {hasliked ? 
-  //           <svg id={blogItem._id}
-  //             xmlns="http://www.w3.org/2000/svg"
-  //             className="h-5 w-5 cursor-pointer"
-  //             viewBox="0 0 20 20"
-  //             fill="red"
-  //           >
-  //             <path onClick={handleLike}  
-  //               fillRule="fill"
-  //               d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z"
-  //               clipRule="evenodd"
-  //             />
-  //           </svg>
-  //         : 
-  //           <HeartIcon
-  //             onClick={handleLike}
-  //             className="w-full h-5 text-red-700 cursor-pointer"
-  //           />
-  //         }
-
-  //         <h2 className="ml-2 text-[#cdcdcd]">{likes}</h2>
-  //       </div>
-  //       <div className="absolute bottom-[2px] right-[4px]">
-  //         <Link href={`/${blogItem._id}`}>
-  //           <a className="text-white">continue reading...</a>
-  //         </Link>
-  //       </div>
-  //     </div>
-  //   );
-  // });
-
+  const filerArr = useMemo(()=>
+      content.filter(item => 
+        item.title.toLowerCase().includes(searchQuery.toLowerCase())
+      ),
+    [searchQuery]
+  )
+      
   return (
-    content.map(post =>{
-      return <Post key = {post._id} blogItem={post}/>
-    })
+    <div className="">
+        <div className='relative mx-auto w-4/5 sm:flex sm:w-full justify-center mt-3'>
+              <div className=' absolute top-[6px] sm:top-[6px] sm:right-[66%]'>
+                  <SearchIcon className = 'h-5 w-10 text-gray-500 cursor-pointer' />
+              </div> 
+              <input onChange = {e => setSearchQuery(e.target.value)} className='pl-10 w-full sm:w-[40%] h-[2rem] rounded-md bg-gray-300 text-base sm:h-full' type='text' placeholder='search' value={searchQuery}/>
+        </div> 
+        <div>
+          {filerArr.map(post =>{
+          return <Post key = {post._id} blogItem={post}/>
+          })}
+        </div> 
+    </div>
   )
 }

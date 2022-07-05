@@ -4,6 +4,9 @@ const nextConfig = {
   images: {
     domains: ['s.w.org'],
   },
+  compiler: {
+    styledComponents: true,
+  },
 }
 
 module.exports = nextConfig
