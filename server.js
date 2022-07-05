@@ -42,8 +42,8 @@ const connect = async()=>{
 connect()
 
 
-import auth_router from './routes/route.js'
+import user_router from './routes/userRoute.js'
 import post_router from './routes/postRoute.js'
 
-app.use('/user', auth_router)
+app.use('/user', user_router)
 app.use('/', post_router)

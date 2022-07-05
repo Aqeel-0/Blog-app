@@ -4,6 +4,7 @@ const userschema = new mongoose.Schema({
     name: {type: String, required: true},
     email: {type: String, required: true},
     password: {type: String, required: true},
+    image: {type: String, default: ''},
     date: {type: Date, default: Date.now()},
 
 })
@@ -14,8 +15,7 @@ const blogschema = new mongoose.Schema({
     body: {type: String, required: true},
     likes: {type: Object, default: {}},
     likes_count: {type: Number, default: 0},
-    comment: {type: Object, default: {}},
-
+    comment: {type: Object, default: []},
 })
 
 const userdb = mongoose.model('userDb', userschema)

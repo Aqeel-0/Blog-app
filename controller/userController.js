@@ -67,3 +67,13 @@ export const login = async(req, res)=>{
    
 
 }
+
+export const deleteUser = async (req, res)=>{
+    const id = req.params.userId
+    try {
+        const result = await userdb.findByIdAndDelete(id)
+        res.status(202).json({'result': 'user deleted', user: result})
+    } catch (error) {
+        res.status(400).json({'err': 'failed to delete user'})
+    }
+}

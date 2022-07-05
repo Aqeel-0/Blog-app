@@ -1,4 +1,4 @@
-import { blogdb } from "../model/database.js"
+import { blogdb, userdb } from "../model/database.js"
 import { postSchema } from '../validation-joi/validation.js'
 import joi from 'joi'
 import jsonwebtoken from 'jsonwebtoken'
@@ -91,21 +91,19 @@ export const likePost = async (req, res)=>{
 }
 
 export const commentPost = async (req, res)=>{
-    const data = req.body.input
-    console.log(data)
+    const data = req.body // the main comment
     const identifier = req.params.postId
     const token = req.header('auto-token')
-    const verified = jsonwebtoken.verify(token, process.env.WEB_TOKEN)
-    
+    const {_id} = jsonwebtoken.verify(token, process.env.WEB_TOKEN)
     try {
-        const post = await blogdb.findById(identifier)
+        const user = await userdb.findById(_id) // get user name of the user
         
-        if(verified._id in post.comment){
-            post.comment[verified._id].push(data)
-        }
-        else post.comment[verified._id] = [data]
+        data.time = Date.now() // add time
+        data['user'] = {'name': user.name, 'id': user.id, 'profile': user.image} // add username
+        const post = await blogdb.findById(identifier)
+        post.comment.push(data)
         const result = await blogdb.findByIdAndUpdate(identifier, post, {new: true})
-        res.status(202).json({'message': 'comment added', result})
+        res.status(202).json({'message': 'comment added', comment: result.comment})
     } catch (error) {
         res.status(401).json({'error': 'something happened'})
     }
