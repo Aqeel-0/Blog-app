@@ -16,7 +16,7 @@ function Editpost({blog}) {
         try {
             const result = await axios({
                 method:'patch',
-                url:`http://localhost:5000/edit/${blog._id}`,
+                url:`http://65.1.84.19:5000/edit/${blog._id}`,
                 headers: { "auto-token": cookies.get('jwt') || ''},
                 data:{
                     title: titlestate,
@@ -111,7 +111,7 @@ export async function getServerSideProps({params, query}){
     const post_id = params.postId
     const result = await axios({
         method:'get',
-        url:`http://localhost:5000/post`,
+        url:`http://65.1.84.19:5000/post`,
         data: {
             id: post_id
         }

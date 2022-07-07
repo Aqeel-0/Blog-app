@@ -20,7 +20,7 @@ export default function Post({data}) {
     try {
       const result = await axios({
         method: 'patch',
-        url:`http://localhost:5000/post/${data._id}`,
+        url:`http://65.1.84.19:5000/post/${data._id}`,
         headers: { "auto-token": cookie.get("jwt") || "" },
         data: {
           comment: input
@@ -119,7 +119,7 @@ const Wrapper = styled.div`
 export async function getStaticPaths (){
   const {data} = await axios({
     method: 'get',
-    url: 'http://localhost:5000',
+    url: 'http://65.1.84.19:5000',
   })
 
   const prePage = data.map(item => (
@@ -136,7 +136,7 @@ export async function getStaticProps({params}){
   const {postId} = params
   const result = await axios({
     method:'get',
-    url:'http://localhost:5000/post',
+    url:'http://65.1.84.19:5000/post',
     data: { id: postId}
   
   })

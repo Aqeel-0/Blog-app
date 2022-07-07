@@ -241,7 +241,7 @@ function Index(props) {
 }
 
 export async function getStaticProps() {
-    const response = await axios.get("http://localhost:5000");
+    const response = await axios.get("http://65.1.84.19:5000");
     return {
         props: {
             posts: response.data,
