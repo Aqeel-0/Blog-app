@@ -107,8 +107,8 @@ function Editpost({blog}) {
     );
 }
 
-export async function getServerSideProps({params, query}){
-    const post_id = params.postId
+export async function getServerSideProps({params}){
+    const {post_id} = params
     const result = await axios({
         method:'get',
         url:`http://localhost:5000/post`,

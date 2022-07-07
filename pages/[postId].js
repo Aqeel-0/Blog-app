@@ -1,32 +1,38 @@
 import axios from 'axios'
 import Header from '../components/Header'
-import { IoIosAddCircle } from 'react-icons/io'
-import { useState } from 'react'
-import Cookies from "universal-cookie";
-import styled from 'styled-components';
-
+import { IoIosAddCircle, IoMdTrash } from 'react-icons/io'
+import { useEffect, useState, useMemo } from 'react'
+import Cookies from "universal-cookie"
+import styled from 'styled-components'
+import jsonwebtoken from "jsonwebtoken"
 
 
 
 export default function Post({data}) {
-  const [input, setInput] = useState('')
-  const [comments, setComments] = useState(data.comment.reverse())
-  const [err, setErr] = useState("")
-  const cookie = new Cookies()
 
+  
+  const [input, setInput] = useState('')
+  const [comments, setComments] = useState(data.comment)
+  const [err, setErr] = useState("")
+  const [commentArr, setCommentArr] = useState([])
+  //const cookie = new Cookies()
+  const token = new Cookies().get("jwt")
+  let verified = {}
+  if(token) {
+    verified  = {...jsonwebtoken.verify(token, process.env.NEXT_PUBLIC_WEB_TOKEN)};
+  }
   const handleSubmit = async (e) =>{
-    
     e.preventDefault()
     try {
       const result = await axios({
         method: 'patch',
         url:`http://localhost:5000/post/${data._id}`,
-        headers: { "auto-token": cookie.get("jwt") || "" },
+        headers: { "auto-token": token || "" },
         data: {
           comment: input
         }
       })
-      setComments(result.data.comment.reverse())
+      setComments(result.data.comment)
       //setComments(prevComment => prevComment.reverse())
     } catch (error) {
         setErr(error.response.data.err)
@@ -37,23 +43,43 @@ export default function Post({data}) {
     },700)
     setInput('')
   }
-  
 
+  const deleteComment = async (e)=>{
+    const commentId = e.target.parentNode.id
+    const postId = data._id
+    try {
+      const result = await axios({
+        method:'delete',
+        url:`http://localhost:5000/post/${postId}/${commentId}`
+      })
+      setComments(result.data.comment)
+    } catch (error) {
+      console.log(error)
+    }
+  }
   
-  const commentArr = comments.map(comm =>{
-    return(
-      <div key={comm.time}>
-          <Wrapper className='w-[80%] grid md:grid-cols-[7%_16%_60%]'>
-            <div className='w-14 p-2 flex'>
-              <img className = 'rounded-[50%] object-fit' src='./user.png'/>
+ 
+  function filterComment(){
+    const temp =  comments.map(comm => (
+        <div key={comm.id}>
+            <div className='w-[100%]'>
+              <div className='w-full p-2 flex'>
+                <img className = 'w-14 rounded-[50%] object-fit mr-2' src='./user.png'/>
+                <h1 className='text-lg font-extrabold self-center ml-1 text-white md:ml-0'>{comm.user.name}</h1>
+              </div>
+              <div id = {comm.id} className='w-full p-2 flex justify-between items-center'>
+                <h2 className=' basis-[90%] comment text-[#cdcdcd] md:self-center'>{comm.comment}</h2>
+                {verified._id === comm.user.id && <IoMdTrash id = {comm.id} onClick = {deleteComment} className='icon w-6 h-6 text-white ml-auto'/>}
+              </div>
             </div>
-            <h1 className='user text-lg font-extrabold self-center text-white md:ml-10'>{comm.user.name}</h1>
-            <h2 className='comment text-[#cdcdcd] md:self-center'>{comm.comment}</h2>
-          </Wrapper>
-          <div className='w-full h-[0.2px] bg-white mb-3'></div>
-      </div>
+            <div className='w-full h-[0.2px] bg-white mb-3'></div>
+        </div>
+      )
     )
-  })
+    setCommentArr(temp)
+
+  }
+  useEffect(() => filterComment(), [comments])
   
   
 
@@ -100,66 +126,72 @@ const Wrapper = styled.div`
   display: grid;
   grid-auto-rows: minmax(10px, auto);
   margin-bottom: 4px;
+  .div{
+    grid-column-start: 1;
+    grid-column-end: 4;
+  }
   .user{
     grid-column: 2/4;
   }
   .comment{
     grid-column-start: 1;
-    grid-column-end:4;
+    grid-column-end:3;
+    grid-auto-rows: minmax(5px, auto);
     
   }
-  @media (min-width: 768px) {
-    .user {margin-left: 0;}
+  .icon{
+    grid-column-start: 4;
   }
   
 `
 
 
 
-export async function getStaticPaths (){
-  const {data} = await axios({
-    method: 'get',
-    url: 'http://localhost:5000',
-  })
+// export async function getStaticPaths (){
+//   const {data} = await axios({
+//     method: 'get',
+//     url: 'http://localhost:5000',
+//   })
 
-  const prePage = data.map(item => (
-    { params: {postId: item._id}}
-  ))
-  return {
-    paths: prePage,
-    fallback: false,
-  }
-}
-
-export async function getStaticProps({params}){
-  
-  const {postId} = params
-  const result = await axios({
-    method:'get',
-    url:'http://localhost:5000/post',
-    data: { id: postId}
-  
-  })
-  return{
-    props:{
-      data: result.data
-    }
-  }   
-}
-
-
-// export async function getServerSideProps({req, res, query}){
-//     const {postId} = query
-//     const result = await axios({
-//       method:'get',
-//       url:'http://localhost:5000/post',
-//       data: { id: postId}
-    
-//     })
-//     return{
-//       props:{
-//         data: result.data
-//       }
-//     }   
+//   const prePage = data.map(item => (
+//     { params: {postId: item._id}}
+//   ))
+//   return {
+//     paths: prePage,
+//     fallback: false,
+//   }
 // }
+
+// export async function getStaticProps({params}){
+  
+//   const {postId} = params
+//   const result = await axios({
+//     method:'get',
+//     url:'http://localhost:5000/post',
+//     data: { id: postId}
+  
+//   })
+//   return{
+//     props:{
+//       data: result.data
+//     }
+//   }   
+// }
+
+
+export async function getServerSideProps({req, res, params}){
+    console.log('called')
+    const {postId} = params
+    const result = await axios({
+      method:'get',
+      url:'http://localhost:5000/post',
+      data: { id: postId}
+    
+    })
+    return{
+      props:{
+        data: result.data
+      }
+    }   
+}
 

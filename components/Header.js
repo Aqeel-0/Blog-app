@@ -15,6 +15,8 @@ import { Fragment } from 'react'
 import { Menu, Transition } from '@headlessui/react'
 import { ChevronDownIcon } from '@heroicons/react/solid'
 import jsonwebtoken from "jsonwebtoken";
+
+
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
 }
@@ -50,7 +52,7 @@ export default function Header() {
   }, [logstatus]);
 
   return (
-    <div> 
+    <div className="relative max-w-[100%]"> 
       <div className="flex sticky justify-between md:justify-around items-center pb-1 pt-1 shadow-md bg-white">
         <div className="w-36 h-full relative hidden lg:inline-grid">
           <Link href="/">
@@ -184,7 +186,7 @@ export default function Header() {
         </div>
       </div>
 
-      <div className={toggle? "absolute z-10 w-56 h-[29rem] bg-gray-800 top-[56px] left-[166px] transition-[all_5s_ease-in-out]" : "absolute z-10 w-36 h-[29rem] bg-white  top-[-30rem] left-[-9rem] transition-[all_5s_ease-in-out]" }>
+      <div className={toggle? "absolute z-10 w-56 h-[29rem] bg-gray-800 top-[65px] left-[165px] transition-[all_5s_ease-in-out]" : "absolute z-10 w-36 h-[29rem] bg-white  top-[-30rem] left-[-9rem] transition-[all_5s_ease-in-out]" }>
         <div className="flex flex-col mt-5 h-full justify-start">
           <Link href="/">
             <a className="w-full flex justify-center">

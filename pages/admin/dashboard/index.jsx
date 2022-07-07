@@ -76,7 +76,7 @@ function Index(props) {
             <div
                 key={post._id}
                 id={post._id}
-                className="flex items-center h-12 rounded-sm border border-b-0 border-white bg-gray-900 pl-3 mb-2 overflow-hidden"
+                className="flex items-center h-12 rounded-sm border-b border-white bg-gray-900 pl-3 mb-2 overflow-hidden"
             >
                 <h1 className="text-white text-lg ">{post.title}</h1>
                 <div id={post._id} className=" flex ml-auto p-4">

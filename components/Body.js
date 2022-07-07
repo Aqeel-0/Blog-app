@@ -12,7 +12,7 @@ export default function Body({ content }) {
       content.filter(item => 
         item.title.toLowerCase().includes(searchQuery.toLowerCase())
       ),
-    [searchQuery]
+      [searchQuery]
   )
       
   return (
