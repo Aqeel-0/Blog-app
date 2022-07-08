@@ -2,15 +2,16 @@ import axios from "axios";
 import { useState } from "react";
 import Header from "../../../../components/Header";
 import Cookies from "universal-cookie";
+import { useRouter } from "next/router";
 function Editpost({blog}) {
-    
     
     const [titlestate, setTitlestate] = useState(blog.title)
     const [imagestate, setImagestate] = useState(blog.image)
     const [bodystate, setBodystate] = useState(blog.body)
-    
+    const router = useRouter()
     const [err, setErr] = useState("");
     const cookies = new Cookies()
+
     const handelSubmit = async(e)=>{
         e.preventDefault()
         try {
@@ -21,7 +22,7 @@ function Editpost({blog}) {
                 data:{
                     title: titlestate,
                     image: imagestate,
-                    body: bodystate
+                    body: bodystate,
                 }
                
             })
@@ -32,15 +33,14 @@ function Editpost({blog}) {
         }
         setTimeout(()=>{
             setErr('')
+            router.push('/admin/dashboard')
         },700)
 
         
     }
     
-  
     return (
     <>
-    
         <div className="max-w-5xl mx-auto">
             <Header />
             <div className=" h-screen w-9/12 mx-auto">
@@ -108,12 +108,12 @@ function Editpost({blog}) {
 }
 
 export async function getServerSideProps({params}){
-    const {post_id} = params
+    const {postId} = params
     const result = await axios({
         method:'get',
         url:`http://localhost:5000/post`,
         data: {
-            id: post_id
+            id: postId
         }
     })
     return {

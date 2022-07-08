@@ -81,8 +81,6 @@ export default function Post({data}) {
   }
   useEffect(() => filterComment(), [comments])
   
-  
-
   return (
     <div>
      
@@ -90,7 +88,7 @@ export default function Post({data}) {
     
       <div className="mt-6 mx-auto w-3/4 flex flex-col">
         <div className='w-3/4 mx-auto h-40 '>
-          <img className='w-full h-full object-fit' src={data.image} />
+          <img className='w-full h-full object-contain md:object-fit' src={data.image} />
         </div>
         <div className= 'sm:w-3/4 sm:mx-auto'>
           <h1 className= 'text-3xl text-[#cdcdcd]'>{data.title}</h1>
