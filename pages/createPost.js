@@ -31,7 +31,7 @@ function CreatePost() {
             body: bodyState,
         };
         const authAxios = axios.create({
-            baseURL: "http://65.1.84.19:5000",
+            baseURL: `${process.env.NEXT_PUBLIC_BACKEND}`,
             headers: { "auto-token": cookies.get('jwt') || ''},
         });
         try {

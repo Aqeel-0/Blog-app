@@ -19,7 +19,7 @@ function Registration() {
         };
         try {
             const result = await axios.post(
-                "http://65.1.84.19:5000/user/registration",
+                `${process.env.NEXT_PUBLIC_BACKEND}/user/registration`,
                 newuser
             );
             setEmailinput("");

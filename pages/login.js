@@ -15,7 +15,7 @@ function Login() {
         const login = { email: emailInput.trim(), password: passwordInput };
         
         axios
-            .post("http://65.1.84.19:5000/user/login", login, {
+            .post(`${process.env.NEXT_PUBLIC_BACKEND}/user/login`, login, {
                 withCredentials: true,
                 credentials: "include",
             })

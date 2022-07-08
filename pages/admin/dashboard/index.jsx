@@ -47,7 +47,7 @@ function Index(props) {
     const handleDelete = async (e) => {
         const id = postId
         const options = axios.create({
-            baseURL: "http://localhost:5000",
+            baseURL: `${process.env.NEXT_PUBLIC_BACKEND}`,
             headers: { "auto-token": cookie.get("jwt") || "" },
         });
         setShow(false)
@@ -76,7 +76,7 @@ function Index(props) {
             <div
                 key={post._id}
                 id={post._id}
-                className="flex items-center h-12 rounded-sm border border-b-0 border-white bg-gray-900 pl-3 mb-2 overflow-hidden"
+                className="flex items-center h-12 rounded-sm border-b border-white bg-gray-900 pl-3 mb-2 overflow-hidden"
             >
                 <h1 className="text-white text-lg ">{post.title}</h1>
                 <div id={post._id} className=" flex ml-auto p-4">
@@ -241,7 +241,7 @@ function Index(props) {
 }
 
 export async function getStaticProps() {
-    const response = await axios.get("http://65.1.84.19:5000");
+    const response = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND}`);
     return {
         props: {
             posts: response.data,
