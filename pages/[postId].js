@@ -119,7 +119,7 @@ const Wrapper = styled.div`
 export async function getStaticPaths (){
   const {data} = await axios({
     method: 'get',
-    url: '',
+    url: `${process.env.NEXT_PUBLIC_BACKEND}`,
   })
 
   const prePage = data.map(item => (
