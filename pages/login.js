@@ -15,7 +15,7 @@ function Login() {
         const login = { email: emailInput.trim(), password: passwordInput };
         
         axios
-            .post("http://localhost:5000/user/login", login, {
+            .post(`${process.env.NEXT_PUBLIC_API}/user/login`, login, {
                 withCredentials: true,
                 credentials: "include",
             })

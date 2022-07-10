@@ -26,7 +26,7 @@ export default function Post({data}) {
     try {
       const result = await axios({
         method: 'patch',
-        url:`http://localhost:5000/post/${data._id}`,
+        url:`${process.env.NEXT_PUBLIC_API}/post/${data._id}`,
         headers: { "auto-token": token || "" },
         data: {
           comment: input
@@ -50,7 +50,7 @@ export default function Post({data}) {
     try {
       const result = await axios({
         method:'delete',
-        url:`http://localhost:5000/post/${postId}/${commentId}`
+        url:`${process.env.NEXT_PUBLIC_API}/post/${postId}/${commentId}`
       })
       setComments(result.data.comment)
     } catch (error) {
@@ -182,7 +182,7 @@ export async function getServerSideProps({req, res, params}){
     const {postId} = params
     const result = await axios({
       method:'get',
-      url:'http://localhost:5000/post',
+      url:`${process.env.NEXT_PUBLIC_API}/post`,
       data: { id: postId}
     
     })

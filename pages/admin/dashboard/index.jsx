@@ -47,7 +47,7 @@ function Index(props) {
     const handleDelete = async (e) => {
         const id = postId
         const options = axios.create({
-            baseURL: "http://localhost:5000",
+            baseURL: `${process.env.NEXT_PUBLIC_API}`,
             headers: { "auto-token": cookie.get("jwt") || "" },
         });
         setShow(false)
@@ -241,7 +241,7 @@ function Index(props) {
 }
 
 export async function getStaticProps() {
-    const response = await axios.get("http://localhost:5000");
+    const response = await axios.get(`${process.env.NEXT_PUBLIC_API}`);
     return {
         props: {
             posts: response.data,

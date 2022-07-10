@@ -36,7 +36,7 @@ export default function User({ userData }) {
         try {
             const result = await axios({
                 method:'delete',
-                url: 'http://localhost:5000/user/'+id,
+                url: `${process.env.NEXT_PUBLIC_API}/user/`+id,
                 headers: {'auto-token': cookie.get('jwt') || ''}
             })
             setShow(false)
@@ -214,7 +214,7 @@ export default function User({ userData }) {
 
 
 export async function getStaticProps() {
-    const response = await axios.get("http://localhost:5000/user");
+    const response = await axios.get(`${process.env.NEXT_PUBLIC_API}/user`);
     return {
         props: {
             userData: response.data,

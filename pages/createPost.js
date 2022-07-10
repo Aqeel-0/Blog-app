@@ -31,7 +31,7 @@ function CreatePost() {
             body: bodyState,
         };
         const authAxios = axios.create({
-            baseURL: "http://localhost:5000",
+            baseURL: `${process.env.NEXT_PUBLIC_API}`,
             headers: { "auto-token": cookies.get('jwt') || ''},
         });
         try {

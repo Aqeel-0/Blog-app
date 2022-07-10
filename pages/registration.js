@@ -19,7 +19,7 @@ function Registration() {
         };
         try {
             const result = await axios.post(
-                "http://localhost:5000/user/registration",
+                `${process.env.NEXT_PUBLIC_API}/user/registration`,
                 newuser
             );
             setEmailinput("");
